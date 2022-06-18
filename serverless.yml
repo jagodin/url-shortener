@@ -12,9 +12,9 @@ plugins:
 custom:
     # stage-specific variables
     dev:
-        HOST: my-cloudfront-domain.cloudfront.net # replace with the WebsiteDomain from stack outputs
-    prod:
-        HOST: my-domain.com # replace with your production url
+        HOST: d23pamx6h8jdbu.cloudfront.net # replace with the WebsiteDomain from stack outputs
+    # prod:
+    #     HOST: my-domain.com # replace with your production url
     # serverless-esbuild config, bundles your code and allows you to use typescript or es-next features in your handler code
     esbuild:
         bundle: true
@@ -47,15 +47,20 @@ provider:
         AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
         NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000'
     lambdaHashingVersion: '20201221'
+    ecr:
+      images:
+        appimage:
+          path: ./
 
 functions:
-    remix:
-        handler: server/index.handler
-        description: My Remix app!
-        events:
-            - httpApi:
-                  method: any
-                  path: '/{proxy+}'
+  url-shortener:
+    image:
+      name: appimage
+    description: A simple URL shortener build with Remix.
+    events:
+        - httpApi:
+              method: any
+              path: '/{proxy+}'
 resources:
     Resources:
         # Created by serverless
@@ -145,9 +150,9 @@ resources:
                                     - '.execute-api.${self:provider.region}.amazonaws.com'
                           Id: RemixOrigin
                           # UNCOMMENT THIS TO SET THE X-Forwarded-Host header for API Gateway
-                          # OriginCustomHeaders:
-                          #   - HeaderName: X-Forwarded-Host
-                          #     HeaderValue: ${self:${self:provider.stage}.HOST}
+                          OriginCustomHeaders:
+                            - HeaderName: X-Forwarded-Host
+                              HeaderValue: ${self:provider.stage}.HOST
                           CustomOriginConfig:
                               OriginProtocolPolicy: https-only
                               OriginSSLProtocols: [TLSv1.2]
