@@ -106,24 +106,6 @@ resources:
                                       - WebsiteOriginAccessIdentity
                                       - S3CanonicalUserId
 
-        # Use CloudFront in front of the Remix API Gateway endpoint
-        RemixCachePolicy:
-            Type: AWS::CloudFront::CachePolicy
-            Properties:
-                CachePolicyConfig:
-                    Name: RemixCachePolicy
-                    DefaultTTL: 60
-                    MinTTL: 0
-                    MaxTTL: 60
-                    ParametersInCacheKeyAndForwardedToOrigin:
-                        HeadersConfig:
-                            HeaderBehavior: none
-                        EnableAcceptEncodingGzip: true
-                        QueryStringsConfig:
-                            QueryStringBehavior: all
-                        CookiesConfig:
-                            CookieBehavior: all
-
         # CloudFront Configuration
         CDN:
             Type: AWS::CloudFront::Distribution
@@ -172,8 +154,7 @@ resources:
                             [GET, HEAD, OPTIONS, PUT, PATCH, POST, DELETE]
                         CachedMethods: [GET, HEAD, OPTIONS]
                         Compress: true
-                        CachePolicyId:
-                            Ref: RemixCachePolicy
+                        CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6 #Managed-OptimizedCache
                         TargetOriginId: RemixOrigin
                         ViewerProtocolPolicy: redirect-to-https
                     # Requests to /static go to S3
