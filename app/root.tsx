@@ -1,3 +1,5 @@
+import type { PropsWithChildren } from 'react';
+import type { LinksFunction, MetaFunction } from '@remix-run/node';
 import {
   Links,
   LiveReload,
@@ -6,27 +8,38 @@ import {
   Scripts,
   ScrollRestoration,
 } from '@remix-run/react';
-import type { MetaFunction } from 'remix';
 
-export const meta: MetaFunction = () => {
-  return { title: 'New Remix App' };
+export const links: LinksFunction = () => {
+  return [{ rel: 'icon', href: '/_static/favicon.ico' }];
 };
+
+export const meta: MetaFunction = () => ({
+  charset: 'utf-8',
+  title: 'URL Shortener',
+  viewport: 'width=device-width,initial-scale=1',
+});
 
 export default function App() {
   return (
+    <Document>
+      <Outlet />
+    </Document>
+  );
+}
+
+const Document = ({ children }: PropsWithChildren<unknown>) => {
+  return (
     <html lang="en">
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
       </head>
-      <body>
-        <Outlet />
+      <body style={{ margin: 0, backgroundColor: '#f9f9f9' }}>
+        {children}
         <ScrollRestoration />
         <Scripts />
-        {process.env.NODE_ENV === 'development' && <LiveReload />}
+        <LiveReload />
       </body>
     </html>
   );
-}
+};

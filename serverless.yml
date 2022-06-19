@@ -8,11 +8,12 @@ package:
 plugins:
     - serverless-esbuild
     - serverless-s3-sync
+    - serverless-offline
 
 custom:
     # stage-specific variables
     dev:
-        HOST: d23pamx6h8jdbu.cloudfront.net # replace with the WebsiteDomain from stack outputs
+        HOST: ${env:DEV_HOST}
     # prod:
     #     HOST: my-domain.com # replace with your production url
     # serverless-esbuild config, bundles your code and allows you to use typescript or es-next features in your handler code
@@ -46,6 +47,8 @@ provider:
     environment:
         AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
         NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000'
+        DATABASE_URL: ${env:DATABASE_URL}
+        SESSION_SECRET: ${env:SESSION_SECRET}
     lambdaHashingVersion: '20201221'
     ecr:
       images:
