@@ -1,4 +1,4 @@
-name: Typecheck and Lint
+name: Deploy
 on:
   push:
     branches:
