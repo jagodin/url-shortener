@@ -107,7 +107,7 @@ jobs:
 
       - name: 🚀 Production Deploy
         if: github.ref == 'refs/heads/main'
-        run: npm run deploy --stage production
+        run: npm run deploy -- --stage production
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
